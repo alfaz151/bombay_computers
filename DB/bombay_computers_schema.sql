@@ -1,7 +1,7 @@
-
 CREATE DATABASE IF NOT EXISTS bombay_computers;
 USE bombay_computers;
 
+-- USERS TABLE
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -14,18 +14,20 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- CATEGORIES TABLE
 CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
+-- PRODUCTS TABLE
 CREATE TABLE products (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     category_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    condition ENUM('New', 'Like New', 'Good', 'Fair', 'Poor') DEFAULT 'Good',
+    `condition` ENUM('New', 'Like New', 'Good', 'Fair', 'Poor') DEFAULT 'Good',
     price DECIMAL(10, 2),
     location VARCHAR(100),
     is_active BOOLEAN DEFAULT TRUE,
@@ -34,6 +36,7 @@ CREATE TABLE products (
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+-- ORDERS TABLE
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     buyer_id INT NOT NULL,
@@ -44,6 +47,7 @@ CREATE TABLE orders (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+-- REVIEWS TABLE
 CREATE TABLE reviews (
     id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT NOT NULL,
@@ -55,6 +59,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- MESSAGES TABLE (optional chat)
 CREATE TABLE messages (
     id INT PRIMARY KEY AUTO_INCREMENT,
     sender_id INT NOT NULL,
@@ -67,6 +72,7 @@ CREATE TABLE messages (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+-- ADMIN LOGS TABLE (admin actions tracking)
 CREATE TABLE admin_logs (
     id INT PRIMARY KEY AUTO_INCREMENT,
     admin_id INT NOT NULL,
@@ -78,6 +84,7 @@ CREATE TABLE admin_logs (
     FOREIGN KEY (admin_id) REFERENCES users(id)
 );
 
+-- INDEXES
 CREATE INDEX idx_products_category ON products(category_id);
 CREATE INDEX idx_orders_buyer ON orders(buyer_id);
 CREATE INDEX idx_reviews_product ON reviews(product_id);
