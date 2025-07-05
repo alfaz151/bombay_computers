@@ -14,6 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.bombaycomputers.dto.user.UserRead;
 import java.util.stream.Collectors;
+import com.bombaycomputers.dto.ApiResponse;
+import com.bombaycomputers.dto.user.UserCreate;
+import jakarta.validation.Valid;
+
+
 
 @Slf4j
 @RestController
@@ -33,8 +38,10 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserCreate user) {
+        log.info("Creating user: {}", user);
+        // userService.createUser(user);
+        return ResponseEntity.ok(new ApiResponse("200", "User created successfully", null, "success"));
     }
 
     @GetMapping("/read/{id}")
