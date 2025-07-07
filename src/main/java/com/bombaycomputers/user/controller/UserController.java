@@ -1,4 +1,4 @@
-package com.bombaycomputers.controllers;
+package com.bombaycomputers.user.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,15 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.bombaycomputers.model.User;
-import com.bombaycomputers.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+import com.bombaycomputers.user.model.User;
+import com.bombaycomputers.user.service.UserService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.bombaycomputers.dto.user.UserRead;
+import com.bombaycomputers.user.dto.UserRead;
 import java.util.stream.Collectors;
-import com.bombaycomputers.dto.ApiResponse;
-import com.bombaycomputers.dto.user.UserCreate;
+import com.bombaycomputers.common.ApiResponse;
+import com.bombaycomputers.user.dto.UserCreate;
+import com.bombaycomputers.user.mapper.UserMapper;
 import jakarta.validation.Valid;
 
 
@@ -27,21 +29,23 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/read")
     public ResponseEntity<List<UserRead>> getAllUsers() {
         log.info("Getting all users");
         List<UserRead> userReads = userService.getAllUsers().stream()
-            .map(UserController::toUserRead)
+            .map(userMapper::toDto)
             .collect(Collectors.toList());
         return ResponseEntity.ok(userReads);
     }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserCreate user) {
-        log.info("Creating user: {}", user);
-        // userService.createUser(user);
-        return ResponseEntity.ok(new ApiResponse("200", "User created successfully", null, "success"));
+        userService.createUser(user);
+        return ResponseEntity.ok(new ApiResponse("201", "User created successfully", null, "success"));
     }
 
     @GetMapping("/read/{id}")
@@ -51,19 +55,13 @@ public class UserController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(toUserRead(user));
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    private static UserRead toUserRead(User user) {
-        UserRead dto = new UserRead();
-        dto.id = user.getId();
-        dto.name = user.getName();
-        dto.email = user.getEmail();
-        dto.phone = user.getPhone();
-        dto.address = user.getAddress();
-        dto.role = user.getRole();
-        dto.isAdmin = user.isAdmin();
-        dto.createdAt = user.getCreatedAt();
-        return dto;
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable long id, @Valid @RequestBody UserCreate user) {
+        userService.updateUser(id, user);
+        return ResponseEntity.ok(new ApiResponse("200", "User updated successfully", null, "success"));
     }
+
 }

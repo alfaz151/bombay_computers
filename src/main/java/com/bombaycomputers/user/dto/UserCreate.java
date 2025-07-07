@@ -1,4 +1,4 @@
-package com.bombaycomputers.dto.user;
+package com.bombaycomputers.user.dto;
 
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package com.bombaycomputers.exception;
+package com.bombaycomputers.common;
 
-import com.bombaycomputers.dto.ApiResponse;
+import com.bombaycomputers.common.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.bombaycomputers.model;
+package com.bombaycomputers.user.model;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.bombaycomputers.dto;
+package com.bombaycomputers.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
